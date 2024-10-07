@@ -29,9 +29,6 @@ const women = [
     }
 ]
 
-women.push(newWoman);
-response.json(women);
-
 /* Função para identificar qual a porta usada pelo server */
 
 function identifyDoor()
@@ -68,7 +65,7 @@ app.listen(door, identifyDoor);
 
 /* Realizar uma requisição para o servidor - GET */
 
-app.use(router.get('/women', viewWomen));
+app.get(router.get('/women', viewWomen));
 
 /* POST */
 
