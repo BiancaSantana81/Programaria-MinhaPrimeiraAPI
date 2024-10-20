@@ -2,32 +2,21 @@
 
 const express = require("express");
 const app = express();
+app.use(express.json())
 
-/* Importar a biblioteca UUID*/
 
-const {v4: uuidv4} = require('uuid');
+/* Importar banco de dados */
+
+
+const connectDataBase = require('./dataBase'); // ligando o banco de dados ao arquivo dataBase.js
+connectDataBase();
+
+const Woman = require('./womanModel');
 
 /* Constantes: qual a porta e criar rota para servidor */
 
 const router = express.Router();
 const door = 3333;
-
-/* Array de objetos */
-
-const women = [
-    {
-        id: '1',
-        name: 'Bianca Santana',
-        image: 'https://avatars.githubusercontent.com/u/76911791?v=4',
-        minibio: 'Desenvolvedora C / C++'
-    },
-    {
-        id: '2',
-        name: 'Simara Conceição',
-        image: 'https://avatars.githubusercontent.com/u/50921892?v=4',
-        bio: 'Desenvolvedora e Instrutora'
-    }
-]
 
 /* Função para identificar qual a porta usada pelo server */
 
@@ -38,26 +27,73 @@ function identifyDoor()
 
 /* GET: Função para mandar uma resposta ao servidor */
 
-function viewWomen(request, response)
-{
-    response.json(women);
+async function viewWomen(request, response) {
+    try {
+        const womanDataBase = await Woman.find();
+        response.status(200).json(womanDataBase);
+    } catch (erro) {
+        console.error('Error fetching women:', erro);
+        response.status(500).json({ error: 'An error occurred while fetching data.' });
+    }
 }
 
 /* POST: Função para criar uma nova mulher com POST */
 
-function addWoman(request, response)
+async function addWoman(request, response)
 { 
-    const newWoman = {
-    id : uuidv4(),
+    const newWoman = new Woman ({
     name: request.body.name,
     image: request.body.image,
-    bio: request.body.bio
-    }
+    quote: request.body.quote,
+    minibio: request.body.minibio
+    })
 
-    women.push(newWoman);
-    response.json(women);
+    try {
+        const womanCreated = await newWoman.save();
+        response.status(201).json(womanCreated);
+
+    } catch(erro) {
+        console.log(erro);
+    }
 }
 
+/*PATCH: Função para alterar os dados de uma mulher já existente no banco de dados */
+
+async function editWomen(request, response)
+{
+    try {
+        const findWoman = await Woman.findById(request.params.id);
+        if (request.body.name) {
+            findWoman.name = request.body.name;
+        }
+        if (request.body.image) {
+            findWoman.image = request.body.image;
+        }
+        if (request.body.minibio) {
+            findWoman.minibio = request.body.minibio;
+        }
+        if (request.body.quote) {
+            findWoman.quote = request.body.quote;
+        }
+        const updateWomanDataBase = await findWoman.save();
+        response.json(updateWomanDataBase);
+    } catch(erro) {
+        console.log(erro);
+    }
+}
+
+/* Função para deletar mulher do banco de dados */
+
+async function deleteWomen(request, response)
+{
+    try {
+        await Woman.findByIdAndDelete(request.params.id);
+        response.json({message: 'woman successfully deleted!'});
+
+    } catch (erro) {
+        console.log(erro);
+    }
+}
 
 /* Inicializar o servidor pela porta escolhida */
 
@@ -65,8 +101,16 @@ app.listen(door, identifyDoor);
 
 /* Realizar uma requisição para o servidor - GET */
 
-app.get(router.get('/women', viewWomen));
+app.use(router.get('/women', viewWomen));
 
 /* POST */
 
 app.use(router.post('/women', addWoman));
+
+/* PATH */
+
+app.use(router.patch('/women/:id', editWomen));
+
+/* DELETE */
+
+app.use(router.delete('/women/:id', deleteWomen));
