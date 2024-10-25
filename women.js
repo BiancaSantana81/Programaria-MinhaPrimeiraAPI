@@ -6,7 +6,6 @@ app.use(express.json())
 
 /* Importar banco de dados */
 
-
 const connectDataBase = require('./dataBase'); // ligando o banco de dados ao arquivo dataBase.js
 connectDataBase();
 
