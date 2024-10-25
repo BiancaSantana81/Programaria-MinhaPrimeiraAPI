@@ -4,7 +4,6 @@ const express = require("express");
 const app = express();
 app.use(express.json())
 
-
 /* Importar banco de dados */
 
 
@@ -16,7 +15,10 @@ const Woman = require('./womanModel');
 /* Constantes: qual a porta e criar rota para servidor */
 
 const router = express.Router();
+const cors = require('cors'); // permite consumir esta API no front-end
 const door = 3333;
+
+app.use(cors());
 
 /* Função para identificar qual a porta usada pelo server */
 
