@@ -14,10 +14,14 @@ const Woman = require('./womanModel');
 /* Constantes: qual a porta e criar rota para servidor */
 
 const router = express.Router();
-const cors = require('cors'); // permite consumir esta API no front-end
 const door = 3333;
 
-app.use(cors());
+// const cors = require('cors'); // permite consumir esta API no front-end
+// app.use(cors());
+
+const cors = require('cors');
+app.use(cors({ origin: 'https://front-programaria-react-virid.vercel.app' }));
+
 
 /* Função para identificar qual a porta usada pelo server */
 
