@@ -115,3 +115,21 @@ app.use(router.patch('/women/:id', editWomen));
 /* DELETE */
 
 app.use(router.delete('/women/:id', deleteWomen));
+
+
+async function testAPI() {
+    try {
+        const response = await fetch('https://back-end-dhin.onrender.com/women');
+        if (!response.ok) {
+            throw new Error(`Erro HTTP: ${response.status}`);
+        }
+        const data = await response.json();
+        console.log('Resposta da API:', data);
+    } catch (error) {
+        console.error('Erro ao conectar à API:', error);
+    }
+}
+
+testAPI();
+
+
