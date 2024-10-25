@@ -19,5 +19,5 @@ Este projeto foi desenvolvido como parte do curso ["Minha Primeira API"](https:/
 ---
 
 ##  Agradecimentos
-- **PrograMaria**: Pela oportunidade e bolsa de estudos,a educação inclusiva pode impulsionar mais mulheres em TECH. ❤️
+- **PrograMaria**: Pela oportunidade e bolsa de estudos, a educação inclusiva pode impulsionar mais mulheres em TECH. ❤️
 - **Simara Conceição**: Pela paciência e dom de ensinar.
